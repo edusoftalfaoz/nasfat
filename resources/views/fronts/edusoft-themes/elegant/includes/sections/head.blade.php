@@ -2,7 +2,7 @@
     $headName   = $schoolDetails['principal_name'] ?? '';
     $headPhoto  = site_image($page->head_photo, 'school-images/head-of-school.jpg');
     $signature  = site_image($schoolDetails['principal_signature'] ?? null);
-    $paragraphs = preg_split('/\R{2,}/', trim((string) $page->head_message)) ?: [];
+    $paragraphs = preg_split('/\R{2,}/u', trim((string) $page->head_message)) ?: [];
 @endphp
 
 @if(count(array_filter($paragraphs)))

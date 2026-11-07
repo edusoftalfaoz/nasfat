@@ -8,7 +8,7 @@
     @php
         $img        = site_image($post->image);
         $when       = $post->type === 'event' && $post->event_date ? $post->event_date : ($post->published_at ?? $post->created_at);
-        $paragraphs = preg_split('/\R{2,}/', trim((string) $post->body)) ?: [];
+        $paragraphs = preg_split('/\R{2,}/u', trim((string) $post->body)) ?: [];
     @endphp
 
     <main id="main">

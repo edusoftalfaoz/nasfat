@@ -30,7 +30,7 @@ class HomepageSetting extends Model
     public static function lines(?string $text): array
     {
         return array_values(array_filter(
-            array_map('trim', preg_split('/\R/', (string) $text) ?: []),
+            array_map('trim', preg_split('/\R/u', (string) $text) ?: []),
             fn ($line) => $line !== ''
         ));
     }

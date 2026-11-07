@@ -1,7 +1,7 @@
 @php
     $aboutImg1  = site_image($page->about_image, 'school-images/mosque-front.jpg');
     $aboutImg2  = site_image($page->about_image_2, 'school-images/building-1.jpg');
-    $paragraphs = preg_split('/\R{2,}/', trim((string) $page->about_body)) ?: [];
+    $paragraphs = preg_split('/\R{2,}/u', trim((string) $page->about_body)) ?: [];
     $highlights = collect($page->about_highlights ?? [])->pluck('text')->filter()->values();
 @endphp
 
