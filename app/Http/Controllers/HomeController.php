@@ -2,68 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Feature;
+use App\Models\GalleryItem;
+use App\Models\HomepageSetting;
+use App\Models\NewsPost;
+use App\Models\Program;
+use App\Models\Testimonial;
+use Illuminate\Support\Facades\Schema;
 
 class HomeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
         $schoolDetails = getSchoolDetails();
 
-        return view('fronts.edusoft-themes.elegant.home', compact('schoolDetails'));
+        // If the website migrations have not been run yet, show the page with
+        // empty lists instead of a 500 error.
+        $ready = Schema::hasTable('homepage_settings');
 
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return view('fronts.edusoft-themes.elegant.home', [
+            'schoolDetails' => $schoolDetails,
+            'stats'         => getSchoolStats(),
+            'page'          => $ready ? HomepageSetting::current() : new HomepageSetting(),
+            'programs'      => $ready ? Program::active()->get() : collect(),
+            'features'      => $ready ? Feature::active()->get() : collect(),
+            'testimonials'  => $ready ? Testimonial::active()->get() : collect(),
+            'gallery'       => $ready ? GalleryItem::active()->get() : collect(),
+            'news'          => $ready ? NewsPost::published()->limit(3)->get() : collect(),
+        ]);
     }
 }

@@ -135,6 +135,13 @@ Route::get('/report-cards/{record}', [ReportCardController::class, 'show'])
     ->name('report-cards.show');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Public website
+Route::get('/news', [\App\Http\Controllers\NewsController::class, 'index'])->name('news.index');
+Route::get('/news/{slug}', [\App\Http\Controllers\NewsController::class, 'show'])->name('news.show');
+Route::post('/contact', [\App\Http\Controllers\ContactMessageController::class, 'store'])
+    ->middleware('throttle:5,1')
+    ->name('contact.store');
 // In routes/web.php
 Route::get('/homework/{homework}/download', [HomeworkController::class, 'download'])->name('homework.download');
 

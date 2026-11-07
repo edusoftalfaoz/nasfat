@@ -198,3 +198,34 @@ if (!function_exists('getSchoolStats')) {
 
     
 }
+
+if (!function_exists('site_image')) {
+    /**
+     * Public URL for an image that was uploaded in the admin panel, or that
+     * ships with the app (anything under public/, e.g. "school-images/x.jpg").
+     * Falls back to $fallback (a path under public/) when nothing is set.
+     */
+    function site_image($path, ?string $fallback = null): ?string
+    {
+        if (is_array($path)) {
+            $path = reset($path) ?: null;
+        }
+
+        if (blank($path)) {
+            return $fallback ? asset($fallback) : null;
+        }
+
+        if (preg_match('#^(https?:)?//#', $path)) {
+            return $path;
+        }
+
+        // Files bundled with the app live in public/, not in storage.
+        if (str_starts_with($path, 'school-images/') || str_starts_with($path, 'images/')) {
+            return asset($path);
+        }
+
+        $disk = config('filament.default_filesystem_disk', 'public');
+
+        return \Illuminate\Support\Facades\Storage::disk($disk)->url($path);
+    }
+}
